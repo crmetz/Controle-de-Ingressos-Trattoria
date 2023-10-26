@@ -31,6 +31,9 @@ table {
     width: 100%;
 }
 
+thead {
+    background-color: lightgrey;
+}
 
 th, td {
     border: 2px solid rgb(0, 0, 0);
