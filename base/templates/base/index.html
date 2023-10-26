@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Ingressos</title>
+    <link rel="stylesheet" href="{% static 'styles/styleindex.css' %}"></head>
+<body>
+    <!-- Navbar -->
+    <div class="container">
+        <img src="{% static 'images/logo-branco.png' %}" alt="logo" class="moveable">
+        <h1 class="moveable">Controle de Ingressos Trattoria</h1>
+    </div>
+
+    <!-- Tabela de controle -->
+    <div class="tabela-div">
+    <h2>Confirmação de Pagamento:</h2>
+    <table>
+        <thead>
+        <tr>
+            <td>Comprador</td> <td>Telefone</td> <td>Nº Ingressos</td> <td>Valor Total</td> <td>Comprovante</td> <td>Confirmação</td> <td>Mensagem</td>
+        </tr>
+        </thead>
+        
+        <tbody>
+        {% for item in response %}
+        <tr>
+            <td>{{item}}</td> <td>54 XXXXXXXXX</td> <td>X-A / X-C</td> <td>R$ XXX</td> <td>--------</td> <td><input class="checkbox" type="checkbox"></td> <td><a href="#" class="myButton">Enviar</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <!-- Cards Mensagens -->
+    <section class="msg-section">
+    <h2>Mensagens:</h2>
+    <div class="cards">
+        <h3>Mensagem de Lembrete</h3>
+        <p>Olá, sou a adm da trattoria</p>
+        <a href="#" class="myButton">Enviar</a>
+    </div>
+
+    <div class="cards">
+        <h3>Mensagem de Pesquisa de Satisfação</h3>
+        <p>Olá, sou a adm da trattoria</p>
+        <a href="#" class="myButton">Enviar</a>
+    </div>
+    </section>
+    
+</body>
+</html>
