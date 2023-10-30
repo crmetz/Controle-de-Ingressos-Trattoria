@@ -1,8 +1,48 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+from .messenger import Messenger
 import requests
+import json
+
+# from ..messenger import Messenger
 # Create your views here.
 
+
 def home(request):
-    response = requests.get('https://trattoria-three.vercel.app/get', json={"sql" : "select * from compradores;"})
-    context = {'response' : response}
+    response_buyers = requests.get('https://trattoria-three.vercel.app/get', json={"sql" : "select * from compradores;"})
+    response_data1 = json.loads(response_buyers.content.decode('utf-8'))  # Decodifica os bytes e converte para JSON
+
+    response_tickets = requests.get('https://trattoria-three.vercel.app/get', json={"sql" : "select * from ingressos;"})
+    response_data2 = json.loads(response_tickets.content.decode('utf-8'))
+
+    valor_total = 0
+    nIng = 0
+
+    if request.method == 'POST':
+        api_key = 'eF4JBUQJX6zG'
+        api_url = 'https://trattoria-three.vercel.app/get'
+        messenger = Messenger(api_key, api_url)
+
+        buyer_id = request.POST.get('buyer_id')
+
+        if 'confirmation_message' in request.POST:
+            phone_number = request.POST['phone_number']
+            buyer_name = request.POST['buyer_name']
+            formatted_phone_number = f"55{phone_number[0:2]}{phone_number[3:]}" if len(phone_number) >= 3 else phone_number
+            messenger.send_confirmation_message(formatted_phone_number, buyer_name)
+            return HttpResponse(f"Mensagem de Confirmação de Pagamento enviada com sucesso! Para comprador {buyer_name} , {formatted_phone_number}")
+
+        if 'reminder_message' in request.POST:
+            phone_numbers, buyer_names = messenger.fetch_data_from_api()
+            for i in range(len(phone_numbers)):
+                messenger.send_reminder_message(phone_numbers[i], buyer_names[i])
+            return HttpResponse("Lembretes enviados com sucesso!")
+
+        if 'satisfaction_survey_message' in request.POST:
+            phone_numbers, _ = messenger.fetch_data_from_api()
+            for phone_number in phone_numbers:
+                messenger.send_satisfaction_survey_message(phone_number)
+            return HttpResponse("Pesquisas de Satisfação enviadas com sucesso!")
+
+    context = {'response_buyers': response_data1['json'], 'response_tickets': response_data2['json'], 'valor_total': valor_total, 'nIng': nIng}  # Usando a chave principal 'json'
     return render(request, 'base/index.html', context)

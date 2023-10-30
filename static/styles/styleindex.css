@@ -76,6 +76,18 @@ th, td {
 	top:1px;
 }
 
+.checkbox {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+}
+
+.ingresso {
+    background-color: #e69179;
+}
+
 /* Cards de Mensagem ------------------------------------------------------------------*/
 
 .msg-section {

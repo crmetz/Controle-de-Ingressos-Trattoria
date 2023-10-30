@@ -7,6 +7,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Ingressos</title>
     <link rel="stylesheet" href="{% static 'styles/styleindex.css' %}"></head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".checkbox").change(function() {
+                var id = $(this).attr('id').split('_')[1]; // Obtém o ID do comprador
+                var isChecked = $(this).is(":checked");
+                var valor = isChecked ? 'pago' : 'nao-pago'; // Inverte o valor para 'nao-pago' se estiver marcado
+    
+                // Aqui você envia a requisição POST com o ID e o valor 'pago'/'nao-pago'
+                $.ajax({
+                    type: "POST",
+                    url: "https://trattoria-three.vercel.app/post",
+                    contentType: "application/json",
+                    data: JSON.stringify({ sql: "UPDATE Compradores SET pago = '" + valor + "' WHERE id = " + id + ";" }),
+                    success: function(response) {
+                        console.log("Requisição enviada com sucesso para o comprador com ID " + id + valor);
+                        // Faça algo com a resposta, se necessário
+                    },
+                    error: function(error) {
+                        console.error("Erro ao enviar requisição:", error);
+                    }
+                });
+            });
+    
+            // Código para enviar o formulário quando o botão 'Enviar' é clicado
+            $(".myButton").click(function() {
+                $(this).closest("form").submit();
+            });
+        });
+    </script>
 <body>
     <!-- Navbar -->
     <div class="container">
@@ -20,17 +50,70 @@
     <table>
         <thead>
         <tr>
-            <td>Comprador</td> <td>Telefone</td> <td>Nº Ingressos</td> <td>Valor Total</td> <td>Comprovante</td> <td>Confirmação</td> <td>Mensagem</td>
+            <td>ID</td> <td>Nome do Comprador</td> <td>Telefone</td> <td>Nº Ingressos</td> <td>Valor Total</td> <td>Confirmação de Pagamento</td> <td>Mensagem</td>
         </tr>
         </thead>
-        
-        <tbody>
-        {% for item in response %}
-        <tr>
-            <td>{{item}}</td> <td>54 XXXXXXXXX</td> <td>X-A / X-C</td> <td>R$ XXX</td> <td>--------</td> <td><input class="checkbox" type="checkbox"></td> <td><a href="#" class="myButton">Enviar</a></td>
-        </tr>
-        {% endfor %}
+
+        <tbody> 
+            {% for item in response_buyers %}
+                <tr>
+                    {% with nIng=0 %}
+                    {% endwith %}
+                    <td>{{ item.0 }}</td> 
+                    <td>{{ item.1 }}</td>
+                    <td>{{ item.2 }}</td>
+                    {% for value in response_tickets %}
+                        {% if value.0 == item.0  %}
+                            <div class="ingresso">
+                                <td>Tipo Ingresso: {{value.5}} <br>
+                                    Nome: {{value.1}} <br>
+                                    CPF: {{value.2}} <br>
+                                    Restrição: {{value.3}} <br>
+                                    Conhecido: {{value.4}} <br>
+                                    {% with nIng=nIng|add:1 %}
+                                    {% endwith %}
+                                </td>
+                                
+                            </div>
+                            {% if value.5 == "adult" %}
+                                {% with valor_total=valor_total|add:110 %}
+                                {% endwith %}
+                            {% endif %}
+
+                            {% if value.5 == 'child' %}
+                                {% with valor_total=valor_total|add:55 %}
+                                {% endwith %}
+                            {% endif %}
+
+                            {% else %}
+                                
+                        {% endif %}  
+ 
+                    {% endfor %}
+                    {% if nIng == 0 %}
+                        <td>Nenhum Ingresso Encontrado</td>
+                    {% endif %}
+                    <td>{{valor_total}}</td>
+                    <td><input class="checkbox" type="checkbox" id="checkbox_{{ item.0 }}" {% if item.5 == 'pago' %} checked {% endif %}></td> 
+
+
+                    <td>
+
+
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="phone_number" value="{{ item.2 }}">
+                            <input type="hidden" name="buyer_name" value="{{ item.1 }}">
+                            <button name="confirmation_message" type="submit" href="#" class="myButton">Enviar</button>
+                        </form>
+                    
+                    
+                    </td>   
+                </tr> 
+            {% endfor %}
         </tbody>
+        
+        
     </table>
     </div>
 
@@ -39,14 +122,22 @@
     <h2>Mensagens:</h2>
     <div class="cards">
         <h3>Mensagem de Lembrete</h3>
-        <p>Olá, sou a adm da trattoria</p>
-        <a href="#" class="myButton">Enviar</a>
+        <p>Queremos reforçar a data do evento: será no dia 9 de novembro de 2023.... </p>
+        <form method="post" action="">
+            {% csrf_token %}
+            <button name="reminder_message" type="submit" href="#" class="myButton">Enviar</button>
+        </form>
+        <!-- <a name="reminder_message" href="#" class="myButton">Enviar</a> -->
     </div>
 
     <div class="cards">
         <h3>Mensagem de Pesquisa de Satisfação</h3>
-        <p>Olá, sou a adm da trattoria</p>
-        <a href="#" class="myButton">Enviar</a>
+        <p>A Trattoria chegou ao fim! Planejar este evento tão importante não foi uma tarefa fácil, mas com certeza foi satisfatória.....</p>
+        <form method="post" action="">
+            {% csrf_token %}
+            <button name="satisfaction_survey_message" type="submit" href="#" class="myButton">Enviar</button>
+        </form>
+        <!-- <a name=name="satisfaction_survey_message" href="#" class="myButton">Enviar</a> -->
     </div>
     </section>
     
