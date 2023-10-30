@@ -22,24 +22,30 @@ class Messenger:
             print(f"Erro ao obter dados da API: {e}")
             return [], []
 
-    def send_confirmation_message(self, phone_number, buyer_name):
-        message = f'''Olá, {buyer_name}, gostaríamos de agradecer pela compra do ingresso para a Trattoria! Ficamos felizes de recebê-lo em nossa experiência gastronômica, que foi pensada com muito carinho para vocês.
+    def send_confirmation_message(self, phone_number, buyer_name, ingressos):
+        message = f'''Olá👋, {buyer_name}, gostaríamos de agradecer pela compra do ingresso para a Trattoria! Ficamos felizes de recebê-lo em nossa experiência gastronômica, que foi pensada com muito carinho para vocês.🍝🍴🇮🇹
 
         Gostaríamos também de confirmar os ingressos:
-        - ingresso - adulto
-        - ingresso - prato infantil'''
+        {ingressos} '''
         self._send_message(phone_number, message)
 
     def send_reminder_message(self, phone_number, buyer_name):
         message = f'''Olá, {buyer_name}!
 
-        Espero que esteja tudo bem contigo. Estamos empolgados com a proximidade do evento Trattoria Arte Italiana, elaborado com carinho pelos alunos dos cursos técnicos do CETEC UCS. Queremos reforçar a data do evento: será no dia 9 de novembro de 2023. Será um prazer imenso contar com a sua presença! Até lá!'''
+        Tudo bem? Estamos empolgados com a proximidade do evento Trattoria Arte Italiana 🍝, elaborado com carinho pelos alunos dos cursos técnicos do CETEC UCS. Segue as informações necessárias para seu comparecimento no evento:
+        
+        Data: 09/11/2023
+        Início: 19:00
+        Endereço: Av. Vindima, nº 1000, Parque de Eventos Eloy Kunz, Flores da Cunha, RS.
+
+        Será um prazer imenso contar com a sua presença! Até lá!'''
+
         self._send_message(phone_number, message)
 
     def send_satisfaction_survey_message(self, phone_number):
         message = '''Caros Clientes:
 
-        A Trattoria chegou ao fim! Planejar este evento tão importante não foi uma tarefa fácil, mas com certeza foi satisfatória. Agradecemos a sua presença e esperamos que você tenha gostado! Gostaríamos de saber sua opinião sobre a noite! Abraços do Técnico em Administração, Gastronomia e Informática.
+        A Trattoria chegou ao fim! Planejar este evento tão importante não foi uma tarefa fácil, mas com certeza foi satisfatória. Agradecemos a sua presença e esperamos que você tenha gostado! Gostaríamos de saber sua opinião sobre a noite! Abraços do Técnico em Administração, Gastronomia e Informática 😊. 
 
         Segue o link para a pesquisa: 
         https://docs.google.com/forms/u/0/'''

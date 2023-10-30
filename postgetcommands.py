@@ -6,7 +6,7 @@ import requests
 
 # print(table['json'])
 
-response = requests.get('https://trattoria-three.vercel.app/get', json={"sql" : "select * from compradores;"})
+response = requests.get('https://trattoria-three.vercel.app/get', json={"sql" : "select * from ingressos;"})
 #
 #response = requests.post('https://trattoria-three.vercel.app/post', json={"sql" : "INSERT INTO ingressos()VALUES (57, 'Cristian Metz', '03855254087', 'Intolerância à lactose', 'Ninguem', 'adult', 57);"})
 

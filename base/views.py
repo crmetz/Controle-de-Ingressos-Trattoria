@@ -7,6 +7,9 @@ import json
 # from ..messenger import Messenger
 # Create your views here.
 
+def tratar_fone(phone_number):
+    formatted_phone_number = f"55{phone_number[0:2]}{phone_number[3:]}" if len(phone_number) >= 3 else phone_number
+    return formatted_phone_number
 
 def home(request):
     response_buyers = requests.get('https://trattoria-three.vercel.app/get', json={"sql" : "select * from compradores;"})
@@ -22,20 +25,31 @@ def home(request):
         api_key = 'eF4JBUQJX6zG'
         api_url = 'https://trattoria-three.vercel.app/get'
         messenger = Messenger(api_key, api_url)
-
+        
         buyer_id = request.POST.get('buyer_id')
 
         if 'confirmation_message' in request.POST:
             phone_number = request.POST['phone_number']
             buyer_name = request.POST['buyer_name']
-            formatted_phone_number = f"55{phone_number[0:2]}{phone_number[3:]}" if len(phone_number) >= 3 else phone_number
-            messenger.send_confirmation_message(formatted_phone_number, buyer_name)
-            return HttpResponse(f"Mensagem de Confirmação de Pagamento enviada com sucesso! Para comprador {buyer_name} , {formatted_phone_number}")
+            ingressos = ""
+            # for item in response_buyers:
+            #     for value in response_tickets:        
+            #         if value.6 == item.0:
+            #             if value.5 == "adult":
+            #                 ingressos = ingressos + "Ingresso: Prato Adulto \n"
+            #             if value.5 == "kid":
+            #                 ingressos = ingressos + "Ingresso: Prato Criança \n"
+            #             if value.5 == "baby":
+            #                 ingressos = ingressos + "Ingresso: Prato Bebê \n"
+
+            messenger.send_confirmation_message(tratar_fone(phone_number), buyer_name, ingressos)
+            return HttpResponse(f"Mensagem de Confirmação de Pagamento enviada com sucesso! Para comprador {buyer_name} , {phone_number}")
 
         if 'reminder_message' in request.POST:
             phone_numbers, buyer_names = messenger.fetch_data_from_api()
             for i in range(len(phone_numbers)):
-                messenger.send_reminder_message(phone_numbers[i], buyer_names[i])
+                messenger.send_reminder_message(tratar_fone(phone_numbers[i]), buyer_names[i])
+            
             return HttpResponse("Lembretes enviados com sucesso!")
 
         if 'satisfaction_survey_message' in request.POST:
