@@ -18,9 +18,6 @@ def home(request):
     response_tickets = requests.get('https://trattoria-three.vercel.app/get', json={"sql" : "select * from ingressos;"})
     response_data2 = json.loads(response_tickets.content.decode('utf-8'))
 
-    valor_total = 0
-    nIng = 0
-
     if request.method == 'POST':
         api_key = 'eF4JBUQJX6zG'
         api_url = 'https://trattoria-three.vercel.app/get'
@@ -31,19 +28,20 @@ def home(request):
         if 'confirmation_message' in request.POST:
             phone_number = request.POST['phone_number']
             buyer_name = request.POST['buyer_name']
+            buyer_id = request.POST.get('buyer_id')
             ingressos = ""
-            # for item in response_buyers:
-            #     for value in response_tickets:        
-            #         if value.6 == item.0:
-            #             if value.5 == "adult":
-            #                 ingressos = ingressos + "Ingresso: Prato Adulto \n"
-            #             if value.5 == "kid":
-            #                 ingressos = ingressos + "Ingresso: Prato Criança \n"
-            #             if value.5 == "baby":
-            #                 ingressos = ingressos + "Ingresso: Prato Bebê \n"
+
+            for value in response_data2['json']:        
+                if int(value[6]) == int(buyer_id): 
+                    if value[5] == "adult":
+                            ingressos = ingressos + "Ingresso: Prato Adulto \n"
+                    elif value[5] == "kid":
+                            ingressos = ingressos + "Ingresso: Prato Criança \n"
+                    elif value[5] == "baby":
+                            ingressos = ingressos + "Ingresso: Prato Bebê \n"
 
             messenger.send_confirmation_message(tratar_fone(phone_number), buyer_name, ingressos)
-            return HttpResponse(f"Mensagem de Confirmação de Pagamento enviada com sucesso! Para comprador {buyer_name} , {phone_number}")
+            #return HttpResponse(f"Mensagem de Confirmação de Pagamento enviada com sucesso! Para comprador {buyer_name} , {phone_number}")
 
         if 'reminder_message' in request.POST:
             phone_numbers, buyer_names = messenger.fetch_data_from_api()
@@ -55,8 +53,8 @@ def home(request):
         if 'satisfaction_survey_message' in request.POST:
             phone_numbers, _ = messenger.fetch_data_from_api()
             for phone_number in phone_numbers:
-                messenger.send_satisfaction_survey_message(phone_number)
+                messenger.send_satisfaction_survey_message(tratar_fone(phone_number))
             return HttpResponse("Pesquisas de Satisfação enviadas com sucesso!")
 
-    context = {'response_buyers': response_data1['json'], 'response_tickets': response_data2['json'], 'valor_total': valor_total, 'nIng': nIng}  # Usando a chave principal 'json'
+    context = {'response_buyers': response_data1['json'], 'response_tickets': response_data2['json']}  # Usando a chave principal 'json'
     return render(request, 'base/index.html', context)

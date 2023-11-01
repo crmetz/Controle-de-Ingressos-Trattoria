@@ -119,10 +119,11 @@
                     <td>
 
 
-                        <form method="post" action="">
+                        <form method="post" action="" onsubmit="return confirm('Você tem certeza que deseja enviar a mensagem de confirmação?');">
                             {% csrf_token %}
                             <input type="hidden" name="phone_number" value="{{ item.2 }}">
                             <input type="hidden" name="buyer_name" value="{{ item.1 }}">
+                            <input type="hidden" name="buyer_id" value="{{ item.0 }}">
                             
                             <button name="confirmation_message" type="submit" href="#" class="myButton">Enviar</button>
                         </form>
@@ -143,7 +144,7 @@
     <div class="cards">
         <h3>Mensagem de Lembrete</h3>
         <p>Queremos reforçar a data do evento: será no dia 9 de novembro de 2023.... </p>
-        <form method="post" action="">
+        <form method="post" action="" onsubmit="return confirm('Você tem certeza que deseja enviar a mensagem de confirmação?');">
             {% csrf_token %}
             <button name="reminder_message" type="submit" href="#" class="myButton">Enviar</button>
         </form>
@@ -153,7 +154,7 @@
     <div class="cards">
         <h3>Mensagem de Pesquisa de Satisfação</h3>
         <p>A Trattoria chegou ao fim! Planejar este evento tão importante não foi uma tarefa fácil, mas com certeza foi satisfatória.....</p>
-        <form method="post" action="">
+        <form method="post" action="" onsubmit="return confirm('Você tem certeza que deseja enviar a mensagem de confirmação?');">
             {% csrf_token %}
             <button name="satisfaction_survey_message" type="submit" href="#" class="myButton">Enviar</button>
         </form>

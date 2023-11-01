@@ -23,32 +23,16 @@ class Messenger:
             return [], []
 
     def send_confirmation_message(self, phone_number, buyer_name, ingressos):
-        message = f'''Olá👋, {buyer_name}, gostaríamos de agradecer pela compra do ingresso para a Trattoria! Ficamos felizes de recebê-lo em nossa experiência gastronômica, que foi pensada com muito carinho para vocês.🍝🍴🇮🇹
-
-        Gostaríamos também de confirmar os ingressos:
-        {ingressos} '''
+        message = f'''Olá👋, {buyer_name}! \n\nGostaríamos de agradecer pela compra do ingresso para a Trattoria! Ficamos felizes em recebê-lo(a) na nossa experiência gastronômica, que foi pensada com muito carinho para vocês.🍝🍴🇮🇹 \n\nGostaríamos também de confirmar os ingressos: \n{ingressos} '''
         self._send_message(phone_number, message)
 
     def send_reminder_message(self, phone_number, buyer_name):
-        message = f'''Olá, {buyer_name}!
-
-        Tudo bem? Estamos empolgados com a proximidade do evento Trattoria Arte Italiana 🍝, elaborado com carinho pelos alunos dos cursos técnicos do CETEC UCS. Segue as informações necessárias para seu comparecimento no evento:
-        
-        Data: 09/11/2023
-        Início: 19:00
-        Endereço: Av. Vindima, nº 1000, Parque de Eventos Eloy Kunz, Flores da Cunha, RS.
-
-        Será um prazer imenso contar com a sua presença! Até lá!'''
+        message = f'''Olá, {buyer_name}!\n\nTudo bem? Estamos empolgados com a proximidade do evento Trattoria Arte Italiana 🍝, elaborado com carinho pelos alunos dos cursos técnicos do CETEC UCS. Segue as informações necessárias para seu comparecimento no evento:\n\n📅Data: 09/11/2023\n⏰Início: 19:00\n📌Endereço: Av. Vindima, nº 1000, Parque de Eventos Eloy Kunz, Flores da Cunha, RS.\n\nSerá um prazer imenso contar com a sua presença! Até lá!'''
 
         self._send_message(phone_number, message)
 
     def send_satisfaction_survey_message(self, phone_number):
-        message = '''Caros Clientes:
-
-        A Trattoria chegou ao fim! Planejar este evento tão importante não foi uma tarefa fácil, mas com certeza foi satisfatória. Agradecemos a sua presença e esperamos que você tenha gostado! Gostaríamos de saber sua opinião sobre a noite! Abraços do Técnico em Administração, Gastronomia e Informática 😊. 
-
-        Segue o link para a pesquisa: 
-        https://docs.google.com/forms/u/0/'''
+        message = '''Caros Clientes:\n\nA Trattoria chegou ao fim! Planejar este evento tão importante não foi uma tarefa fácil, mas com certeza foi satisfatória. Agradecemos a sua presença e esperamos que você tenha gostado! Gostaríamos de saber sua opinião sobre a noite! Abraços do Técnico em Administração, Gastronomia e Informática 😊. \n\nSegue o link para a pesquisa: \nhttps://docs.google.com/forms/d/e/1FAIpQLSfkzm6_XXUK60531KK0f8qHqqIcBHuZmcKQ4VD8BAhfwAZ5FA/viewform?pli=1'''
         self._send_message(phone_number, message)
 
     def _send_message(self, phone_number, message):
