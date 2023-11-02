@@ -34,14 +34,26 @@ def home(request):
             for value in response_data2['json']:        
                 if int(value[6]) == int(buyer_id): 
                     if value[5] == "adult":
-                            ingressos = ingressos + "Ingresso: Prato Adulto \n"
+                            ingressos = ingressos + "Ingresso: Prato Adulto"
+                            if len(value[3]) > 0:
+                                 ingressos = ingressos + " - Com Restrição: " + value[3] + "\n\n"
+                            else:
+                                 ingressos = ingressos + " - Sem Restrição\n\n" 
                     elif value[5] == "kid":
-                            ingressos = ingressos + "Ingresso: Prato Criança \n"
+                            ingressos = ingressos + "Ingresso: Prato Criança"
+                            if len(value[3]) > 0:
+                                 ingressos = ingressos + " - Com Restrição: " + value[3] + "\n\n"
+                            else:
+                                 ingressos = ingressos + " - Sem Restrição\n\n"
                     elif value[5] == "baby":
-                            ingressos = ingressos + "Ingresso: Prato Bebê \n"
+                            ingressos = ingressos + "Ingresso: Prato Bebê"
+                            if len(value[3]) > 0:
+                                 ingressos = ingressos + " - Com Restrição: " + value[3] + "\n\n"
+                            else:
+                                 ingressos = ingressos + " - Sem Restrição\n\n"
 
             messenger.send_confirmation_message(tratar_fone(phone_number), buyer_name, ingressos)
-            #return HttpResponse(f"Mensagem de Confirmação de Pagamento enviada com sucesso! Para comprador {buyer_name} , {phone_number}")
+            return HttpResponse(f"Mensagem de Confirmação de Pagamento enviada com sucesso! Para comprador {buyer_name} , {phone_number}")
 
         if 'reminder_message' in request.POST:
             phone_numbers, buyer_names = messenger.fetch_data_from_api()
